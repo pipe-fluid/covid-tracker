@@ -3,7 +3,7 @@ import "./App.css";
 import getAllCountries from "./covid-api";
 
 function App() {
-	const [countries, setCountries] = useState([]);
+	const { countries, setCountries } = useState();
 
 	useEffect(async () => {
 		const retrievedCountries = await getAllCountries();
