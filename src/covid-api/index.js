@@ -1,11 +1,10 @@
 import axios from "axios";
 
 async function getAllCountries() {
-	const res = await axios.get(
-		"https://covid-tracker-us.herokuapp.com/v2/locations"
-	);
-	console.log(res.data);
-	return res.data;
+  return axios
+    .get("https://covid-tracker-us.herokuapp.com/v2/locations")
+    .then((response) => response.data)
+    .catch((error) => console.error(error));
 }
 
-export default getAllCountries;
+export { getAllCountries };

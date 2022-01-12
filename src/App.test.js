@@ -1,22 +1,41 @@
 import { render, screen } from "@testing-library/react";
+import * as CovidApi from "./covid-api";
+
 import App from "./App";
 
 describe("App", () => {
-	it("Should render an input field.", () => {
-		render(<App />);
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-		const inputField = screen.getByTestId("input-field");
+  it("Should render an input field.", () => {
+    render(<App />);
 
-		expect(inputField).toBeInTheDocument();
-		// expect(inputField).toHaveAttribute("type", "input");
-	});
+    const inputField = screen.getByTestId("input-field");
 
-	// it("Should render an input field.", () => {
-	// 	render(<App />);
+    expect(inputField).toBeInTheDocument();
+  });
 
-	// 	const inputField = screen.getByTestId("input-field");
+  it("Should render a list of countries.", async () => {
+    // ARRANGE
+    const retrievedData = {
+      locations: [
+        { id: 0, country: "Brazil" },
+        { id: 1, country: "Canada" },
+      ],
+    };
 
-	// 	expect(inputField).toBeInTheDocument();
-	// 	// expect(inputField).toHaveAttribute("type", "input");
-	// });
+    jest
+      .spyOn(CovidApi, "getAllCountries")
+      .mockResolvedValueOnce(retrievedData);
+
+    // ACT
+    render(<App />);
+
+    const countriesList = await screen.findByTestId("countries-list");
+
+    // ASSERT
+    expect(countriesList.childNodes[0]).toHaveTextContent("Brazil");
+    expect(countriesList.childNodes[1]).toHaveTextContent("Canada");
+  });
 });
